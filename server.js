@@ -12,7 +12,6 @@ const PORT = process.env.PORT || 3000;
 
 // ─── Middlewares globaux ────────────────────────────────────────────────────
 
-// Liste des origines autorisées : localhost ET n'importe quel site Vercel
 const allowedOrigins = [
   /^http:\/\/localhost(:\d+)?$/, // Pour le développement local
   /https:\/\/.*\.vercel\.app$/   // Pour votre frontend sur Vercel
@@ -30,7 +29,6 @@ app.use(cors({
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -56,6 +54,7 @@ app.get('/', (_req, res) => {
 app.use('/api/parkings',     parkingsRoutes);
 app.use('/api/utilisateurs', utilisateursRoutes);
 app.use('/api/reservations', reservationsRoutes);
+
 
 // ─── Erreurs ─────────────────────────────────────────────────────────────────
 app.use(notFound);
