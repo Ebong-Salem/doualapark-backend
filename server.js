@@ -11,10 +11,17 @@ const app  = express();
 const PORT = process.env.PORT || 3000;
 
 // ─── Middlewares globaux ────────────────────────────────────────────────────
+
+// Liste des origines autorisées : localhost ET n'importe quel site Vercel
+const allowedOrigins = [
+  /^http:\/\/localhost(:\d+)?$/, // Pour le développement local
+  /https:\/\/.*\.vercel\.app$/   // Pour votre frontend sur Vercel
+];
+
 app.use(cors({
   origin: (origin, callback) => {
-    // Autorise toutes les origines localhost (peu importe le port)
-    if (!origin || /^http:\/\/localhost(:\d+)?$/.test(origin)) {
+    // Autorise les requêtes sans origine (comme Postman) ou les origines de la liste
+    if (!origin || allowedOrigins.some(regex => regex.test(origin))) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -49,7 +56,6 @@ app.get('/', (_req, res) => {
 app.use('/api/parkings',     parkingsRoutes);
 app.use('/api/utilisateurs', utilisateursRoutes);
 app.use('/api/reservations', reservationsRoutes);
-
 
 // ─── Erreurs ─────────────────────────────────────────────────────────────────
 app.use(notFound);
